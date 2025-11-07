@@ -1,4 +1,6 @@
 import './styles.css'
+import Button from '../Button';
+import ReservationsTable from '../ReservationsTable';
 
 import React, { useState } from 'react'
 
@@ -97,40 +99,15 @@ const ReservaForm = () => {
                         <option value="17h">17h</option>
                     </select>
                 </div>
-                <button type="submit">{isEditing ? 'Atualizar' : 'Reservar'}</button>
-                {isEditing && <button onClick={() => setIsEditing(null)}>Cancelar</button>}
+                <Button type="submit">{isEditing ? 'Atualizar' : 'Reservar'}</Button>
+                {isEditing && <Button onClick={() => setIsEditing(null)}>Cancelar</Button>}
             </form>
 
-            <h2>Reservas Atuais</h2>
-            {reservations.length === 0 ? (
-                <p>Nenhuma reserva encontrada.</p>
-            ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Origem</th>
-                            <th>Destino</th>
-                            <th>Data</th>
-                            <th>Horário</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {reservations.map(({ id, origin, destination, date, time }) => ( // Destructuring here
-                            <tr key={id}>
-                                <td>{origin}</td>
-                                <td>{destination}</td>
-                                <td>{date}</td>
-                                <td>{time}</td>
-                                <td>
-                                    <button onClick={() => handleEdit(id)}>Editar</button>
-                                    <button onClick={() => handleDelete(id)}>Deletar</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+            <ReservationsTable 
+                reservations={reservations}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+            />
         </div>
     );
 };
