@@ -12,21 +12,30 @@ const ReservaForm = () => {
     const [isEditing, setIsEditing] = useState(null);
 
     // Arrow function and destructuring
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-    // Create
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    // Create and Update
+    const handleSubmit = (event) => {
+        event.preventDefault();
 
-        // Create logic using spread operator
-        const newReservation = { ...formData, id: Date.now() };
-        setReservations([...reservations, newReservation]);
+        if (isEditing !== null) {
+            // Update logic using spread operator
+            const updatedReservations = reservations.map((res) =>
+                res.id === isEditing ? { ...formData, id: isEditing } : res
+            );
+            setReservations(updatedReservations);
+            setIsEditing(null);
+        } else {
+            // Create logic using spread operator
+            const newReservation = { ...formData, id: Date.now() };
+            setReservations([...reservations, newReservation]);
+        }
 
         // Reset form
         setFormData({
@@ -37,9 +46,18 @@ const ReservaForm = () => {
         });
     };
 
+    // Set form to edit a reservation
+    const handleEdit = (id) => {
+        const reservationToEdit = reservations.find((res) => res.id === id);
+        if (reservationToEdit) {
+            setFormData(reservationToEdit);
+            setIsEditing(id);
+        }
+    };
+
     return (
         <div>
-            <h2>{'Faça sua Reserva'}</h2>
+            <h2>{isEditing ? 'Editar Reserva' : 'Faça sua Reserva'}</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="origin">Origem:</label>
@@ -68,7 +86,8 @@ const ReservaForm = () => {
                         <option value="17h">17h</option>
                     </select>
                 </div>
-                <button type="submit">{'Reservar'}</button>
+                <button type="submit">{isEditing ? 'Atualizar' : 'Reservar'}</button>
+                {isEditing && <button onClick={() => setIsEditing(null)}>Cancelar</button>}
             </form>
 
             <h2>Reservas Atuais</h2>
@@ -82,6 +101,7 @@ const ReservaForm = () => {
                             <th>Destino</th>
                             <th>Data</th>
                             <th>Horário</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,6 +111,7 @@ const ReservaForm = () => {
                                 <td>{destination}</td>
                                 <td>{date}</td>
                                 <td>{time}</td>
+                                <td><button onClick={() => handleEdit(id)}>Editar</button></td>
                             </tr>
                         ))}
                     </tbody>
