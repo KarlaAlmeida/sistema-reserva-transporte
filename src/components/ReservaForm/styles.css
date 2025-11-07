@@ -11,6 +11,10 @@ form div {
   flex-direction: column;
 }
 
+h2{
+    color: rgba(238, 146, 7, 0.822);
+}
+
 label {
   margin-bottom: 0.5rem;
 }

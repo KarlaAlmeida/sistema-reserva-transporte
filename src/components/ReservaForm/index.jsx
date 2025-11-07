@@ -1,3 +1,5 @@
+import './styles.css'
+
 import React, { useState } from 'react'
 
 const ReservaForm = () => {
@@ -46,12 +48,21 @@ const ReservaForm = () => {
         });
     };
 
-    // Set form to edit a reservation
+    // Set form to edit
     const handleEdit = (id) => {
         const reservationToEdit = reservations.find((res) => res.id === id);
         if (reservationToEdit) {
             setFormData(reservationToEdit);
             setIsEditing(id);
+        }
+    };
+
+    // Delete a reservation using template literals for confirmation
+    const handleDelete = (id) => {
+        const reservationToDelete = reservations.find((res) => res.id === id);
+        if (window.confirm(`Tem certeza que deseja excluir a reserva de ${reservationToDelete.origin} para ${reservationToDelete.destination} no dia ${reservationToDelete.date}?`)) {
+            const filteredReservations = reservations.filter((res) => res.id !== id);
+            setReservations(filteredReservations);
         }
     };
 
@@ -111,7 +122,10 @@ const ReservaForm = () => {
                                 <td>{destination}</td>
                                 <td>{date}</td>
                                 <td>{time}</td>
-                                <td><button onClick={() => handleEdit(id)}>Editar</button></td>
+                                <td>
+                                    <button onClick={() => handleEdit(id)}>Editar</button>
+                                    <button onClick={() => handleDelete(id)}>Deletar</button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
