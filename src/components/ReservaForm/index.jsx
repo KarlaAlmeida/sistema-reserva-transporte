@@ -19,6 +19,19 @@ const ReservaForm = () => {
     const [filterEndDate, setFilterEndDate] = useState('');
     const [notification, setNotification] = useState({ message: '', type: '' });
 
+    // Mock data for initial reservations
+    const mockReservations = [
+        { id: 1, origin: 'Campina Grande-PB', destination: 'Cabaceiras-PB', date: '2025-12-01', time: '7h' },
+        { id: 2, origin: 'Cabaceiras-PB', destination: 'Campina Grande-PB', date: '2025-12-02', time: '10h' },
+    ];
+
+    // Effect for initial data loading
+    useEffect(() => {
+        setTimeout(() => {
+            setReservations(mockReservations);
+        }, 1000); // Simulate 1-second delay
+    }, []);
+
     useEffect(() => {
         if (notification.message) {
             const timer = setTimeout(() => {
