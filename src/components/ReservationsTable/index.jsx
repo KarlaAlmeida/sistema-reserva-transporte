@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { useReservations } from '../../contexts/ReservationsContext';
 
@@ -19,6 +19,7 @@ const ReservationsTable = () => {
                             <th>Data</th>
                             <th>Horário</th>
                             <th>Ações</th>
+                            <th>Detalhes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,6 +32,9 @@ const ReservationsTable = () => {
                                 <td>
                                     <Button onClick={() => handleEdit(id)}>Editar</Button>
                                     <Button onClick={() => handleDelete(id)}>Deletar</Button>
+                                </td>
+                                <td>
+                                    <Link to={`/reserva/${id}`}>Ver Detalhes</Link>
                                 </td>
                             </tr>
                         ))}
