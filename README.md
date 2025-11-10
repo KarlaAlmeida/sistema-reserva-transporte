@@ -1,4 +1,4 @@
-# Título do Projeto: Sistema para reserva de transporte
+# Sistema para reserva de transporte
 
 ## 1. Objetivo do Projeto
 
