@@ -82,6 +82,6 @@ O desenvolvimento deste projeto foi uma experiência de grande aprendizado, perm
 
 ## 8. Créditos
 
-- **[Karla Cristina Barros de Almeida Matias]:** Desenvolvimento da aplicação.
+- **Karla Cristina Barros de Almeida Matias:** Desenvolvimento da aplicação.
 - Agradecimentos ao professor Willian Almeida Rodrigues e os alunos da Pós Graduação em Engenharia de Software do Infnet pela ajuda e orientação durante o projeto.
 - Documentação oficial do [React](https://reactjs.org/) foi fonte de consulta essencial.
