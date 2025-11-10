@@ -6,6 +6,7 @@ const ReservationsContext = createContext();
 export const useReservations = () => useContext(ReservationsContext);
 
 export const ReservationsProvider = ({ children }) => {
+
     const { formData, handleChange, resetForm, setFormData } = useForm({
         origin: 'Campina Grande-PB',
         destination: 'Cabaceiras-PB',
@@ -19,17 +20,24 @@ export const ReservationsProvider = ({ children }) => {
     const [filterEndDate, setFilterEndDate] = useState('');
     const [notification, setNotification] = useState({ message: '', type: '' });
 
-    // Mock data for initial reservations
-    const mockReservations = [
-        { id: 1, origin: 'Campina Grande-PB', destination: 'Cabaceiras-PB', date: '2025-12-01', time: '7h' },
-        { id: 2, origin: 'Cabaceiras-PB', destination: 'Campina Grande-PB', date: '2025-12-02', time: '10h' },
-    ];
+    const API_URL = 'http://localhost:3001/reservations';
 
-    // Effect for initial data loading
+    // Função para buscar reservas da API
+    const fetchReservations = async () => {
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) {
+                throw new Error('Falha ao buscar reservas');
+            }
+            const data = await response.json();
+            setReservations(data);
+        } catch (error) {
+            setNotification({ message: `Erro ao buscar reservas: ${error.message}`, type: 'error' });
+        }
+    };
+
     useEffect(() => {
-        setTimeout(() => {
-            setReservations(mockReservations);
-        }, 1000); // Simulate 1-second delay
+        fetchReservations();
     }, []);
 
     useEffect(() => {
@@ -53,26 +61,37 @@ export const ReservationsProvider = ({ children }) => {
 
 
     // Create and Update
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (isEditing !== null) {
-            // Update logic using spread operator
-            const updatedReservations = reservations.map((res) =>
-                res.id === isEditing ? { ...formData, id: isEditing } : res
-            );
-            setReservations(updatedReservations);
+        const method = isEditing ? 'PUT' : 'POST';
+        const url = isEditing ? `${API_URL}/${isEditing}` : API_URL;
+
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(isEditing ? 'Falha ao atualizar reserva' : 'Falha ao criar reserva');
+            }
+
+            setNotification({
+                message: `Reserva ${isEditing ? 'atualizada' : 'criada'} com sucesso!`,
+                type: 'success',
+            });
+
             setIsEditing(null);
-            setNotification({ message: 'Reserva atualizada com sucesso!', type: 'success' });
-        } else {
-            // Create logic using spread operator
-            const newReservation = { ...formData, id: Date.now() };
-            setReservations([...reservations, newReservation]);
-            setNotification({ message: 'Reserva criada com sucesso!', type: 'success' });
+            resetForm();
+            fetchReservations();
+        } catch (error) {
+            setNotification({ message: error.message, type: 'error' });
         }
 
-        // Reset form
-        resetForm();
     };
 
     // Set form to edit
@@ -84,13 +103,24 @@ export const ReservationsProvider = ({ children }) => {
         }
     };
 
-    // Delete a reservation using template literals for confirmation
-    const handleDelete = (id) => {
+    // Delete 
+    const handleDelete = async (id) => {
         const reservationToDelete = reservations.find((res) => res.id === id);
         if (window.confirm(`Tem certeza que deseja excluir a reserva de ${reservationToDelete.origin} para ${reservationToDelete.destination} no dia ${reservationToDelete.date}?`)) {
-            const filteredReservations = reservations.filter((res) => res.id !== id);
-            setReservations(filteredReservations);
-            setNotification({ message: 'Reserva excluída com sucesso!', type: 'success' });
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) {
+                    throw new Error('Falha ao excluir reserva');
+                }
+
+                setNotification({ message: 'Reserva excluída com sucesso!', type: 'success' });
+                fetchReservations();
+            } catch (error) {
+                setNotification({ message: error.message, type: 'error' });
+            }
         }
     };
 
