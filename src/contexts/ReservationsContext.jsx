@@ -85,13 +85,15 @@ export const ReservationsProvider = ({ children }) => {
         const method = isEditing ? 'PUT' : 'POST';
         const url = isEditing ? `${API_URL}/${isEditing}` : API_URL;
 
+        const body = isEditing ? { ...formData, id: isEditing } : formData;
+
         try {
             const response = await fetch(url, {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(body),
             });
 
             if (!response.ok) {
