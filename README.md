@@ -2,7 +2,8 @@
 
 ## 2. Objetivo do Projeto
 
-[Descrição breve do que a aplicação faz e qual problema ela resolve. Por exemplo: O objetivo deste projeto é desenvolver um sistema de agendamento de transporte que permita aos usuários visualizar, criar, e gerenciar reservas de forma eficiente, otimizando a logística e a comunicação entre passageiros e a administração.]
+O objetivo deste projeto é desenvolver um sistema de agendamento de transporte que permita aos usuários visualizar, criar, e gerenciar reservas de forma eficiente, otimizando a logística e a comunicação entre passageiros e a administração.
+
 
 ## 3. Features Implementadas
 
