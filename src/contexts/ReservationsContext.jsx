@@ -23,22 +23,51 @@ export const ReservationsProvider = ({ children }) => {
     const API_URL = 'http://localhost:3001/reservations';
 
     // Função para buscar reservas da API
-    const fetchReservations = async () => {
+    const fetchReservations = async (startDate, endDate, signal) => {
+        let url = API_URL;
+        const params = new URLSearchParams();
+
+        // Adiciona parâmetros de data se eles existirem, para filtragem no lado do servidor
+        if (startDate) params.append('date_gte', startDate);
+        if (endDate) params.append('date_lte', endDate);
+
+        const queryString = params.toString();
+        if (queryString) {
+            url += `?${queryString}`;
+        }
+
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(url, { signal });
             if (!response.ok) {
                 throw new Error('Falha ao buscar reservas');
             }
             const data = await response.json();
             setReservations(data);
         } catch (error) {
-            setNotification({ message: `Erro ao buscar reservas: ${error.message}`, type: 'error' });
+            // Ignora o erro de abortar, que é esperado
+            if (error.name !== 'AbortError') {
+                setNotification({ message: `Erro ao buscar reservas: ${error.message}`, type: 'error' });
+            }
         }
     };
 
+    // Efeito inicial para buscar todas as reservas
     useEffect(() => {
-        fetchReservations();
-    }, []);
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        if (filterStartDate && filterEndDate) {
+            fetchReservations(filterStartDate, filterEndDate, signal);
+        } else {
+            // Se os filtros estiverem vazios, busca todas as reservas
+            fetchReservations(null, null, signal);
+        }
+
+        // Função de limpeza para abortar a requisição quando o componente for desmontado ou os filtros mudarem
+        return () => {
+            controller.abort();
+        };
+    }, [filterStartDate, filterEndDate]);
 
     useEffect(() => {
         if (notification.message) {
@@ -48,17 +77,6 @@ export const ReservationsProvider = ({ children }) => {
             return () => clearTimeout(timer);
         }
     }, [notification]);
-
-    const filteredReservations = reservations.filter(reservation => {
-        if (!filterStartDate || !filterEndDate) {
-            return true;
-        }
-        const reservationDate = new Date(reservation.date);
-        const startDate = new Date(filterStartDate);
-        const endDate = new Date(filterEndDate);
-        return reservationDate >= startDate && reservationDate <= endDate;
-    });
-
 
     // Create and Update
     const handleSubmit = async (event) => {
@@ -87,7 +105,7 @@ export const ReservationsProvider = ({ children }) => {
 
             setIsEditing(null);
             resetForm();
-            fetchReservations();
+            fetchReservations(); // Busca todas as reservas novamente
         } catch (error) {
             setNotification({ message: error.message, type: 'error' });
         }
@@ -103,7 +121,7 @@ export const ReservationsProvider = ({ children }) => {
         }
     };
 
-    // Delete 
+    // Delete
     const handleDelete = async (id) => {
         const reservationToDelete = reservations.find((res) => res.id === id);
         if (window.confirm(`Tem certeza que deseja excluir a reserva de ${reservationToDelete.origin} para ${reservationToDelete.destination} no dia ${reservationToDelete.date}?`)) {
@@ -117,7 +135,7 @@ export const ReservationsProvider = ({ children }) => {
                 }
 
                 setNotification({ message: 'Reserva excluída com sucesso!', type: 'success' });
-                fetchReservations();
+                fetchReservations(); // Busca todas as reservas novamente
             } catch (error) {
                 setNotification({ message: error.message, type: 'error' });
             }
@@ -128,7 +146,7 @@ export const ReservationsProvider = ({ children }) => {
         formData,
         handleChange,
         resetForm,
-        reservations: filteredReservations,
+        reservations, // Usa o estado de reservas diretamente
         isEditing,
         setIsEditing,
         showReservations,
