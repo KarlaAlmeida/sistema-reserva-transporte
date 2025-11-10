@@ -1,18 +1,20 @@
 import './styles.css';
 import Button from '../Button';
 import ReservationsTable from '../ReservationsTable';
+import useForm from '../../hooks/useForm';
 
-import React, { useState, useEffect } from 'react'
+
+import React, { useState, useEffect } from 'react';
 
 const ReservaForm = () => {
 
-    const [reservations, setReservations] = useState([]);
-    const [formData, setFormData] = useState({
+    const { formData, handleChange, resetForm, setFormData } = useForm({
         origin: 'Campina Grande-PB',
         destination: 'Cabaceiras-PB',
         date: '',
         time: '7h',
     });
+    const [reservations, setReservations] = useState([]);
     const [isEditing, setIsEditing] = useState(null);
     const [showReservations, setShowReservations] = useState(false);
     const [filterStartDate, setFilterStartDate] = useState('');
@@ -52,15 +54,6 @@ const ReservaForm = () => {
     });
 
 
-    // Arrow function and destructuring
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
     // Create and Update
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -81,12 +74,7 @@ const ReservaForm = () => {
         }
 
         // Reset form
-        setFormData({
-            origin: 'Campina Grande-PB',
-            destination: 'Cabaceiras-PB',
-            date: '',
-            time: '7h',
-        });
+        resetForm();
     };
 
     // Set form to edit
