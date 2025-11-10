@@ -1,8 +1,8 @@
-import './styles.css'
+import './styles.css';
 import Button from '../Button';
 import ReservationsTable from '../ReservationsTable';
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const ReservaForm = () => {
 
@@ -14,6 +14,30 @@ const ReservaForm = () => {
         time: '7h',
     });
     const [isEditing, setIsEditing] = useState(null);
+    const [showReservations, setShowReservations] = useState(false);
+    const [filterStartDate, setFilterStartDate] = useState('');
+    const [filterEndDate, setFilterEndDate] = useState('');
+    const [notification, setNotification] = useState({ message: '', type: '' });
+
+    useEffect(() => {
+        if (notification.message) {
+            const timer = setTimeout(() => {
+                setNotification({ message: '', type: '' });
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification]);
+
+    const filteredReservations = reservations.filter(reservation => {
+        if (!filterStartDate || !filterEndDate) {
+            return true;
+        }
+        const reservationDate = new Date(reservation.date);
+        const startDate = new Date(filterStartDate);
+        const endDate = new Date(filterEndDate);
+        return reservationDate >= startDate && reservationDate <= endDate;
+    });
+
 
     // Arrow function and destructuring
     const handleChange = (event) => {
@@ -35,10 +59,12 @@ const ReservaForm = () => {
             );
             setReservations(updatedReservations);
             setIsEditing(null);
+            setNotification({ message: 'Reserva atualizada com sucesso!', type: 'success' });
         } else {
             // Create logic using spread operator
             const newReservation = { ...formData, id: Date.now() };
             setReservations([...reservations, newReservation]);
+            setNotification({ message: 'Reserva criada com sucesso!', type: 'success' });
         }
 
         // Reset form
@@ -65,11 +91,17 @@ const ReservaForm = () => {
         if (window.confirm(`Tem certeza que deseja excluir a reserva de ${reservationToDelete.origin} para ${reservationToDelete.destination} no dia ${reservationToDelete.date}?`)) {
             const filteredReservations = reservations.filter((res) => res.id !== id);
             setReservations(filteredReservations);
+            setNotification({ message: 'Reserva excluída com sucesso!', type: 'success' });
         }
     };
 
     return (
         <div>
+            {notification.message && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
             <h2>{isEditing ? 'Editar Reserva' : 'Faça sua Reserva'}</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -103,11 +135,36 @@ const ReservaForm = () => {
                 {isEditing && <Button onClick={() => setIsEditing(null)}>Cancelar</Button>}
             </form>
 
-            <ReservationsTable 
-                reservations={reservations}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-            />
+            <div className="reservations-controls">
+                <Button onClick={() => setShowReservations(!showReservations)}>
+                    {showReservations ? 'Ocultar Reservas' : 'Mostrar Reservas'}
+                </Button>
+
+                {showReservations && (
+                    <>
+                        <div className="date-filters">
+                            <label htmlFor="filterStartDate">De:</label>
+                            <input type="date" id="filterStartDate" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} />
+                            <label htmlFor="filterEndDate">Até:</label>
+                            <input type="date" id="filterEndDate" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} />
+                        </div>
+                        <Button onClick={() => {
+                            setFilterStartDate('');
+                            setFilterEndDate('');
+                        }}>
+                            Ver Todas
+                        </Button>
+                    </>
+                )}
+            </div>
+
+            {showReservations && (
+                <ReservationsTable
+                    reservations={filteredReservations}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                />
+            )}
         </div>
     );
 };
