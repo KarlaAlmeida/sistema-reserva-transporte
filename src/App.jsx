@@ -1,37 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+import { Routes, Route } from 'react-router-dom';
+import './App.css';
+import { ReservationsProvider } from './contexts/ReservationsContext';
+import { AuthProvider } from './contexts/AuthContext';
+import Reserva from './pages/Reserva';
+import ReservationDetails from './pages/ReservationDetails';
+import Login from './pages/Login';
+import Admin from './pages/Admin';
+import PrivateRoute from './components/PrivateRoute/index.jsx';
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  
   return (
-    <>
-      <div>
-
-        OIIII!!!!
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AuthProvider>
+      <ReservationsProvider>
+        <Routes>
+          <Route path="/" element={<Reserva />} />
+          <Route path="/reserva/:id" element={<ReservationDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <Admin />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </ReservationsProvider>
+    </AuthProvider>
   )
 }
 
-export default App
+export default App;
+
