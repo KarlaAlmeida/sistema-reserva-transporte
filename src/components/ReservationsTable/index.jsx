@@ -1,7 +1,10 @@
 
 import Button from '../Button';
+import { useReservations } from '../../contexts/ReservationsContext';
 
-const ReservationsTable = ({ reservations, handleEdit, handleDelete }) => {
+const ReservationsTable = () => {
+    const { reservations, handleEdit, handleDelete } = useReservations();
+
     return (
         <div>
             <h2>Reservas Atuais</h2>

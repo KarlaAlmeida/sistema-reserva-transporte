@@ -1,100 +1,26 @@
 import './styles.css';
 import Button from '../Button';
 import ReservationsTable from '../ReservationsTable';
-import useForm from '../../hooks/useForm';
 
-
-import React, { useState, useEffect } from 'react';
+import { useReservations } from '../../contexts/ReservationsContext';
 
 const ReservaForm = () => {
 
-    const { formData, handleChange, resetForm, setFormData } = useForm({
-        origin: 'Campina Grande-PB',
-        destination: 'Cabaceiras-PB',
-        date: '',
-        time: '7h',
-    });
-    const [reservations, setReservations] = useState([]);
-    const [isEditing, setIsEditing] = useState(null);
-    const [showReservations, setShowReservations] = useState(false);
-    const [filterStartDate, setFilterStartDate] = useState('');
-    const [filterEndDate, setFilterEndDate] = useState('');
-    const [notification, setNotification] = useState({ message: '', type: '' });
+    const {
+        formData,
+        handleChange,
+        handleSubmit,
+        isEditing,
+        setIsEditing,
+        notification,
+        showReservations,
+        setShowReservations,
+        filterStartDate,
+        setFilterStartDate,
+        filterEndDate,
+        setFilterEndDate,
+    } = useReservations();
 
-    // Mock data for initial reservations
-    const mockReservations = [
-        { id: 1, origin: 'Campina Grande-PB', destination: 'Cabaceiras-PB', date: '2025-12-01', time: '7h' },
-        { id: 2, origin: 'Cabaceiras-PB', destination: 'Campina Grande-PB', date: '2025-12-02', time: '10h' },
-    ];
-
-    // Effect for initial data loading
-    useEffect(() => {
-        setTimeout(() => {
-            setReservations(mockReservations);
-        }, 1000); // Simulate 1-second delay
-    }, []);
-
-    useEffect(() => {
-        if (notification.message) {
-            const timer = setTimeout(() => {
-                setNotification({ message: '', type: '' });
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [notification]);
-
-    const filteredReservations = reservations.filter(reservation => {
-        if (!filterStartDate || !filterEndDate) {
-            return true;
-        }
-        const reservationDate = new Date(reservation.date);
-        const startDate = new Date(filterStartDate);
-        const endDate = new Date(filterEndDate);
-        return reservationDate >= startDate && reservationDate <= endDate;
-    });
-
-
-    // Create and Update
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        if (isEditing !== null) {
-            // Update logic using spread operator
-            const updatedReservations = reservations.map((res) =>
-                res.id === isEditing ? { ...formData, id: isEditing } : res
-            );
-            setReservations(updatedReservations);
-            setIsEditing(null);
-            setNotification({ message: 'Reserva atualizada com sucesso!', type: 'success' });
-        } else {
-            // Create logic using spread operator
-            const newReservation = { ...formData, id: Date.now() };
-            setReservations([...reservations, newReservation]);
-            setNotification({ message: 'Reserva criada com sucesso!', type: 'success' });
-        }
-
-        // Reset form
-        resetForm();
-    };
-
-    // Set form to edit
-    const handleEdit = (id) => {
-        const reservationToEdit = reservations.find((res) => res.id === id);
-        if (reservationToEdit) {
-            setFormData(reservationToEdit);
-            setIsEditing(id);
-        }
-    };
-
-    // Delete a reservation using template literals for confirmation
-    const handleDelete = (id) => {
-        const reservationToDelete = reservations.find((res) => res.id === id);
-        if (window.confirm(`Tem certeza que deseja excluir a reserva de ${reservationToDelete.origin} para ${reservationToDelete.destination} no dia ${reservationToDelete.date}?`)) {
-            const filteredReservations = reservations.filter((res) => res.id !== id);
-            setReservations(filteredReservations);
-            setNotification({ message: 'Reserva excluída com sucesso!', type: 'success' });
-        }
-    };
 
     return (
         <div>
@@ -160,11 +86,7 @@ const ReservaForm = () => {
             </div>
 
             {showReservations && (
-                <ReservationsTable
-                    reservations={filteredReservations}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                />
+                <ReservationsTable />
             )}
         </div>
     );
