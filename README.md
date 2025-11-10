@@ -66,7 +66,7 @@ Siga os passos abaixo para executar a aplicação em seu ambiente local:
 O código-fonte completo da aplicação está disponível no seguinte repositório:
 - **URL:** `https://github.com/KarlaAlmeida/sistema-reserva-transporte`
 
-## 6. Screenshots ou Demonstração
+## 6. Screenshots
 
 **Tela de Login:**
 <img width="1902" height="577" alt="image" src="https://github.com/user-attachments/assets/f66785f8-3614-4be8-acfc-ea3c30bb145a" />
