@@ -80,7 +80,7 @@ O código-fonte completo da aplicação está disponível no seguinte repositór
 
 O desenvolvimento deste projeto foi uma experiência de grande aprendizado, permitindo a aplicação prática de conceitos de desenvolvimento frontend com React. Um dos principais desafios foi a gestão do estado da aplicação de forma centralizada e eficiente, o que foi solucionado com o uso da Context API. Ao final, o projeto atingiu seu objetivo de criar uma ferramenta funcional para o gerenciamento de reservas, consolidando conhecimentos em tecnologias modernas e boas práticas de desenvolvimento.
 
-## 9. Créditos
+## 8. Créditos
 
 - **[Karla Cristina Barros de Almeida Matias]:** Desenvolvimento da aplicação.
 - Agradecimentos ao professor Willian Almeida Rodrigues e os alunos da Pós Graduação em Engenharia de Software do Infnet pela ajuda e orientação durante o projeto.
