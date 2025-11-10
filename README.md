@@ -1,11 +1,11 @@
-# 1. Título do Projeto: Sistema para reserva de transporte
+# Título do Projeto: Sistema para reserva de transporte
 
-## 2. Objetivo do Projeto
+## 1. Objetivo do Projeto
 
 O objetivo deste projeto é desenvolver um sistema de agendamento de transporte que permita aos usuários visualizar, criar, e gerenciar reservas de forma eficiente, otimizando a logística e a comunicação entre passageiros e a administração.
 
 
-## 3. Features Implementadas
+## 2. Features Implementadas
 
 - **Autenticação de Usuário:** Sistema de login seguro para garantir que apenas usuários autorizados tenham acesso à plataforma.
 - **Visualização de Reservas:** Apresentação das reservas em uma tabela organizada e de fácil leitura, com funcionalidades de ordenação e filtro.
@@ -14,7 +14,7 @@ O objetivo deste projeto é desenvolver um sistema de agendamento de transporte 
 - **Exclusão de Reservas:** Opção para remover reservas que não são mais necessárias.
 - **Filtragem por Data:** Ferramenta que permite aos usuários filtrar as reservas exibidas em um intervalo de datas específico, facilitando a busca por agendamentos passados ou futuros.
 
-## 4. Tecnologias Utilizadas
+## 3. Tecnologias Utilizadas
 
 - **Frontend:**
   - **React:** Biblioteca principal para a construção da interface de usuário.
@@ -25,7 +25,7 @@ O objetivo deste projeto é desenvolver um sistema de agendamento de transporte 
 - **Backend (Mock):**
   - **json-server:** Para simular uma API RESTful localmente e persistir os dados em um arquivo `db.json`.
 
-## 5. Instruções de Execução
+## 4. Instruções de Execução
 
 Siga os passos abaixo para executar a aplicação em seu ambiente local:
 
@@ -61,12 +61,12 @@ Siga os passos abaixo para executar a aplicação em seu ambiente local:
 5.  **Acesse a aplicação:**
     Abra seu navegador e acesse [http://localhost:5173](http://localhost:5173).
 
-## 6. Link do Repositório GitHub
+## 5. Link do Repositório GitHub
 
 O código-fonte completo da aplicação está disponível no seguinte repositório:
 - **URL:** `https://github.com/KarlaAlmeida/sistema-reserva-transporte`
 
-## 7. Screenshots ou Demonstração
+## 6. Screenshots ou Demonstração
 
 **Tela de Login:**
 <img width="1902" height="577" alt="image" src="https://github.com/user-attachments/assets/f66785f8-3614-4be8-acfc-ea3c30bb145a" />
@@ -76,7 +76,7 @@ O código-fonte completo da aplicação está disponível no seguinte repositór
 
 <img width="1907" height="962" alt="image" src="https://github.com/user-attachments/assets/a7434de4-340b-4f1a-91f6-896737f2b530" />
 
-## 8. Considerações Finais
+## 7. Considerações Finais
 
 O desenvolvimento deste projeto foi uma experiência de grande aprendizado, permitindo a aplicação prática de conceitos de desenvolvimento frontend com React. Um dos principais desafios foi a gestão do estado da aplicação de forma centralizada e eficiente, o que foi solucionado com o uso da Context API. Ao final, o projeto atingiu seu objetivo de criar uma ferramenta funcional para o gerenciamento de reservas, consolidando conhecimentos em tecnologias modernas e boas práticas de desenvolvimento.
 
