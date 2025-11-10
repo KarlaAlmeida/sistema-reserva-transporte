@@ -7,7 +7,7 @@ import Reserva from './pages/Reserva';
 import ReservationDetails from './pages/ReservationDetails';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute/index.jsx';
 
 
 function App() {
